@@ -68,6 +68,7 @@
                 <h1>🎯 TikTask</h1>
                 <div class="nav-right">
                     <span id="userInfo"></span>
+                    <button id="manageUsersBtn" class="btn btn-secondary hidden" type="button">Gestión de usuarios</button>
                     <button id="logoutBtn" class="btn btn-secondary">Cerrar Sesión</button>
                 </div>
             </div>
@@ -82,6 +83,64 @@
                 </div>
             </div>
 
+            <section id="statsSection" class="stats-panel">
+                <div class="stats-header">
+                    <h3>Estadísticas</h3>
+                    <p id="statsSubtitle" class="stats-subtitle">Resumen de tus tareas</p>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-label">Completadas</span>
+                        <span id="statsCompleted" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Pendientes</span>
+                        <span id="statsPending" class="stat-value">0</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-label">Total</span>
+                        <span id="statsTotal" class="stat-value">0</span>
+                    </div>
+                </div>
+                <div class="progress-wrapper">
+                    <div class="progress-header">
+                        <span>Progreso</span>
+                        <span id="statsProgressText">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="statsProgressBar" class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </section>
+
+            <h3 class="filters-title">Búsqueda por filtros</h3>
+            <form id="filtersForm" class="filters">
+                <div class="form-group">
+                    <label for="filterStatus">Estado</label>
+                    <select id="filterStatus">
+                        <option value="all">Todas</option>
+                        <option value="no_hecha">Pendientes</option>
+                        <option value="hecha">Completadas</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="filterStartDate">Desde</label>
+                    <input type="date" id="filterStartDate">
+                </div>
+                <div class="form-group">
+                    <label for="filterEndDate">Hasta</label>
+                    <input type="date" id="filterEndDate">
+                </div>
+                <div class="form-group">
+                    <label for="filterSearch">Buscar</label>
+                    <input type="text" id="filterSearch" placeholder="Título o descripción">
+                </div>
+                <div class="filter-actions">
+                    <button type="submit" class="btn btn-secondary">Aplicar</button>
+                    <button type="button" id="clearFiltersBtn" class="btn btn-light">Limpiar</button>
+                </div>
+            </form>
+
             <div id="tasksList" class="tasks-list">
                 <p class="text-center">Cargando tareas...</p>
             </div>
@@ -95,20 +154,71 @@
             <form id="taskForm">
                 <div class="form-group">
                     <label for="taskTitle">Título</label>
-                    <input type="text" id="taskTitle" required>
+                    <input type="text" id="taskTitle" name="title" required>
                 </div>
                 <div class="form-group">
                     <label for="taskDescription">Descripción</label>
-                    <textarea id="taskDescription" rows="3"></textarea>
+                    <textarea id="taskDescription" name="description" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="taskDueDate">Fecha de Vencimiento</label>
-                    <input type="date" id="taskDueDate">
+                    <input type="date" id="taskDueDate" name="due_date">
+                </div>
+                <div class="form-group">
+                    <label for="taskAttachments">Archivos adjuntos</label>
+                    <input type="file" id="taskAttachments" name="attachments" multiple>
+                    <p class="form-helper">Puedes seleccionar varios archivos (máx. 10 MB por archivo)</p>
                 </div>
                 <div id="taskError" class="error"></div>
                 <div class="modal-actions">
                     <button type="button" id="cancelTaskBtn" class="btn btn-secondary">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin User Management Modal -->
+    <div id="adminUsersModal" class="modal hidden">
+        <div class="modal-content admin-users-modal">
+            <div class="modal-header">
+                <h3>Gestión de usuarios</h3>
+                <button id="closeUsersModal" class="modal-close" type="button" aria-label="Cerrar">&times;</button>
+            </div>
+            <p class="admin-panel-subtitle">Administra las cuentas registradas en la plataforma</p>
+            <div class="admin-users-toolbar">
+                <button id="refreshUsersBtn" class="btn btn-light" type="button">Actualizar</button>
+            </div>
+            <div id="adminUsersList" class="admin-users-list">
+                <p class="text-center">Cargando usuarios...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="userModal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="userModalTitle">Editar usuario</h3>
+            <form id="userForm">
+                <div class="form-group">
+                    <label for="userUsername">Usuario</label>
+                    <input type="text" id="userUsername" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="userEmail">Email</label>
+                    <input type="email" id="userEmail" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="userRole">Rol</label>
+                    <select id="userRole" name="role">
+                        <option value="user">Usuario</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                <div id="userError" class="error"></div>
+                <div class="modal-actions">
+                    <button type="button" id="cancelUserBtn" class="btn btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                 </div>
             </form>
         </div>
