@@ -333,7 +333,7 @@ function displayTasks(tasks) {
     }
 
     tasksList.innerHTML = currentTasks.map(task => {
-        const dueDate = task.due_date ? new Date(task.due_date).toLocaleDateString('es-ES') : 'Sin fecha';
+        const dueDate = formatDueDate(task.due_date);
         const isOwnTask = task.user_id === currentUser.id;
         const attachments = Array.isArray(task.attachments) ? task.attachments : [];
 
@@ -891,6 +891,47 @@ function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
+}
+
+function formatDueDate(value) {
+    if (!value && value !== 0) {
+        return 'Sin fecha';
+    }
+
+    if (value instanceof Date) {
+        if (Number.isNaN(value.getTime())) {
+            return 'Sin fecha';
+        }
+        return value.toLocaleDateString('es-ES');
+    }
+
+    if (typeof value === 'string') {
+        const trimmed = value.trim();
+
+        if (!trimmed) {
+            return 'Sin fecha';
+        }
+
+        const dateOnlyMatch = trimmed.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+        if (dateOnlyMatch) {
+            const [, year, month, day] = dateOnlyMatch;
+            return `${day}/${month}/${year}`;
+        }
+
+        const parsed = new Date(trimmed);
+        if (!Number.isNaN(parsed.getTime())) {
+            return parsed.toLocaleDateString('es-ES');
+        }
+
+        return trimmed;
+    }
+
+    const parsed = new Date(value);
+    if (!Number.isNaN(parsed.getTime())) {
+        return parsed.toLocaleDateString('es-ES');
+    }
+
+    return 'Sin fecha';
 }
 
 function logout() {
