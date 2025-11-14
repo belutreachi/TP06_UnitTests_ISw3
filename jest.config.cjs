@@ -44,7 +44,7 @@ module.exports = {
   ],
   
   // Configuración para CI
-  maxWorkers: process.env.CI ? 1 : undefined, // En CI: un worker a la vez
+  maxWorkers: process.env.CI ? 1 : '50%', // En CI: un worker a la vez
   
   // Detectar leaks de memoria
   detectLeaks: false,
